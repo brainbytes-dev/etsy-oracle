@@ -22,7 +22,7 @@ If you believe the architecture is wrong, raise it with Henrik as an approval, d
 
 For this backend/data project, "compiles" is not "works":
 - A unit of work is done only when you have RUN it and observed the real output: the API client returns real listings, the worker writes rows to DuckDB, the scorer produces a ranked niche list. Show the actual output, not a description.
-- No placeholders, no `[TODO]`, no stubbed functions presented as complete.
+- No placeholders, no unfilled `TODO` markers, no stubbed functions presented as complete.
 - Run `python3 ~/.claude/scripts/quality-gate.py <project-root>` before marking UI/content work done.
 
 ## Roles
