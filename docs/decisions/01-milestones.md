@@ -18,7 +18,7 @@ The thing that unblocks everything. No data without a working authenticated clie
 - ☐ **M0.3 Generated API client.** Client generated from Etsy's official OpenAPI 3.0 spec — **not** a random GitHub repo. Typed, with rate-limit handling baked in (10k requests/day, 100 listings/batch).
 - ☐ **M0.4 Rate-limit + retry harness.** Token-bucket or equivalent so we never blow the daily cap; exponential backoff on 429/5xx; persistent counter that survives restarts.
 
-**Done when:** a single command authenticates and prints N real listings (title, listing_id, price, num_favorers, views, creation date) pulled live from `findAllListingsActive` / `getListingsByShop`. Paste the real JSON in the issue.
+**Done when:** a single command authenticates and prints N real listings (title, listing_id, price, num_favorers, creation date) pulled live from `findAllListingsActive` / `getListingsByShop`. Paste the real JSON in the issue. (Note: `views` is **not** in the v3 `ShopListing` schema — see `docs/research/01-signals.md` flag #1; do not expect it in the output.)
 
 ---
 
@@ -39,7 +39,7 @@ The bulk store and the long-running puller. **Worker, never a Vercel serverless 
 
 The headline feature. The thing EverBee charges for.
 
-- ☐ **M2.1 Estimation model.** Estimated units sold + revenue per listing from review-velocity, favorers, views, listing age. Documented method, transparent formula — no black box, no fabricated numbers.
+- ☐ **M2.1 Estimation model.** Estimated units sold + revenue per listing from review-velocity (primary), favorers level + velocity, and listing age. Documented method, transparent formula — no black box, no fabricated numbers. **`views` is unavailable in v3** (see `docs/research/01-signals.md` flag #1) — the brief's mention of views is superseded; do not code against it. The review→sales multiplier `K` is per-category, not flat (flag #2).
 - ☐ **M2.2 Honesty contract.** Every estimate is labelled an estimate everywhere it appears (CLI, future UI, README). Never presented as exact. State the rough accuracy band and that it is better for high-volume listings.
 - ☐ **M2.3 Self-shop calibration.** Allow calibrating the model against a shop whose real sales are known (the user's own), to tune the multiplier.
 
