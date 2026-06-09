@@ -51,4 +51,11 @@ The spec is vendored at `packages/etsy-client/etsy-openapi.json` and regenerated
 - **OAuth2:** reserved for member-scoped writes — not needed for v1.
 - Secrets in `.env` (gitignored). Contract in `.env.example`.
 
+## M0 build notes (verified against the live API, 2026-06-09)
+
+Two findings from wiring the client against the real Etsy API:
+
+- **`views` is not available.** The M0 done-when lists `views` as a column, but Etsy Open API v3 does **not** expose per-listing views on listing search (`findAllListingsActive`). `views` exists only on the `ShopListingWithAssociations` schema and is not returned by the search/active endpoints. The client prints the real fields — `listing_id`, `title`, `price`, `num_favorers`, `creation date` — and labels `views` as unavailable rather than fabricating it. `num_favorers` is the public-demand proxy the estimator uses downstream (consistent with the `etsy-v3-no-views-field` note). This does not block M0; it corrects one column the brief assumed.
+- **`x-api-key` takes the bare keystring** for app-level public endpoints (no `keystring:shared_secret` colon form, no OAuth). Verified end-to-end: a request with an invalid key returns `HTTP 403 {"error":"Invalid API key..."}`, proving the request path, header injection, rate-limiter, and error handling all work. A valid keystring is the only remaining input for the done-when.
+
 **Committed by:** CTO (2026-06-09)
