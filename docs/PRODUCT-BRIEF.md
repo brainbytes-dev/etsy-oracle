@@ -20,11 +20,18 @@ The paid Etsy research tools (EverBee at ~30 USD per month, eRank, Sale Samurai)
 - **Ingestion is a long-running worker, NOT a Vercel serverless function** (function time limits, and Henrik's hard Vercel cost rule). The worker (homeserver / Coolify / a cron) pulls the API and writes DuckDB. Any UI on Vercel reads precomputed aggregates only.
 - **Full category coverage is possible over time** by slicing past the 12,000-offset search cap (sub-keywords, price bands, date filters). Throughput is bounded by the 10k/day API limit; it fills gradually. Reviews cost ~1 call per listing, so pull review-velocity only for top candidates, not every listing.
 
-## 4. Stack
+## 4. Stack and foundation
 
-- TypeScript or Python (CTO's call, pick one and commit). Etsy API client generated from Etsy's official OpenAPI 3.0 spec, not a random GitHub repo.
-- DuckDB for the store. CLI first, then a simple web UI.
+- **TypeScript, in a monorepo on Henrik's standard foundation** (pnpm workspaces + Turborepo, the `nextjs-expo-saas-starter` conventions). Reason: the hosted, minimally-paid version comes later (see roadmap), and laying the monorepo bones now means the web dashboard, auth, and billing drop in later without restructuring.
+- v1 ships ONLY the core packages: `packages/etsy-client` (generated from Etsy's official OpenAPI 3.0 spec, not a random GitHub repo), `packages/worker` (ingestion), `packages/db` (DuckDB schema), `packages/scorer` (estimator + opportunity scorer), and `apps/cli`.
+- The SaaS layer (a Next.js `apps/web` dashboard, auth, Stripe) is **scaffolded-for in the structure but NOT built in v1.** Do not add Stripe, auth, or Expo cruft now; leave clean seams.
+- DuckDB for the store, queried in-process by the worker and CLI.
 
 ## 5. Out of scope for v1
 
-No paid features, no accounts, no scraping. v1 is: API client, ingestion worker, DuckDB schema, the estimator, the opportunity-scorer, a CLI, and a killer README. Web UI and launch come after v1 runs.
+No paid features, no accounts, no web UI, no scraping. v1 is: the core packages above plus a killer README. The hosted version and launch come after v1 runs locally.
+
+## 6. Roadmap beyond v1
+
+- Web dashboard (`apps/web`, Next.js) reading precomputed aggregates.
+- Optional hosted version with a minimal paid tier, on the same monorepo, when the core proves itself. The open-source self-host path stays free and first-class.
