@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.duckdb
+*.duckdb.wal
+data/
+.DS_Store
+dist/
+.next/

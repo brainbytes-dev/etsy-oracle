@@ -1,0 +1,4 @@
+#!/bin/sh
+# LOCAL-ONLY until v1 is real. No premature public push. Delete this file to go public.
+echo "BLOCKED: etsy-oracle stays local until v1 stands. Remove .githooks/pre-push to publish." >&2
+exit 1

@@ -1,0 +1,10 @@
+{
+  "brand": {
+    "name": "etsy-oracle",
+    "domain": null,
+    "domainLive": false,
+    "email": null
+  },
+  "forbiddenTerms": [],
+  "allowPaths": []
+}
