@@ -1,0 +1,25 @@
+{
+  "id": 1245,
+  "level": 1,
+  "name": "Necklaces",
+  "parent_id": 68887312,
+  "children": [
+    {
+      "id": 1246,
+      "level": 2,
+      "name": "Pendant Necklaces",
+      "parent_id": 1245,
+      "children": [],
+      "full_path_taxonomy_ids": [68887312, 1245, 1246]
+    },
+    {
+      "id": 1247,
+      "level": 2,
+      "name": "Chain Necklaces",
+      "parent_id": 1245,
+      "children": [],
+      "full_path_taxonomy_ids": [68887312, 1245, 1247]
+    }
+  ],
+  "full_path_taxonomy_ids": [68887312, 1245]
+}

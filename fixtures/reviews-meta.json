@@ -1,0 +1,77 @@
+{
+  "count": 6,
+  "results": [
+    {
+      "shop_id": 7000000001,
+      "listing_id": 9000000001,
+      "rating": 5,
+      "review": "SYNTHETIC FIXTURE — not a real review. Beautiful necklace, arrived fast.",
+      "language": "en",
+      "image_url_fullxfull": null,
+      "create_timestamp": 1748736000,
+      "created_timestamp": 1748736000,
+      "update_timestamp": 1748736000,
+      "updated_timestamp": 1748736000
+    },
+    {
+      "shop_id": 7000000001,
+      "listing_id": 9000000001,
+      "rating": 5,
+      "review": "SYNTHETIC FIXTURE — not a real review. Exactly as pictured.",
+      "language": "en",
+      "image_url_fullxfull": "https://i.etsystatic.com/synthetic/review_fullxfull.jpg",
+      "create_timestamp": 1753920000,
+      "created_timestamp": 1753920000,
+      "update_timestamp": 1753920000,
+      "updated_timestamp": 1753920000
+    },
+    {
+      "shop_id": 7000000001,
+      "listing_id": 9000000001,
+      "rating": 4,
+      "review": "SYNTHETIC FIXTURE — not a real review. Lovely, chain a touch short.",
+      "language": "en",
+      "image_url_fullxfull": null,
+      "create_timestamp": 1761868800,
+      "created_timestamp": 1761868800,
+      "update_timestamp": 1761868800,
+      "updated_timestamp": 1761868800
+    },
+    {
+      "shop_id": 7000000001,
+      "listing_id": 9000000001,
+      "rating": 5,
+      "review": "SYNTHETIC FIXTURE — not a real review. Gift was a huge hit.",
+      "language": "en",
+      "image_url_fullxfull": null,
+      "create_timestamp": 1769212800,
+      "created_timestamp": 1769212800,
+      "update_timestamp": 1769212800,
+      "updated_timestamp": 1769212800
+    },
+    {
+      "shop_id": 7000000001,
+      "listing_id": 9000000001,
+      "rating": 5,
+      "review": "SYNTHETIC FIXTURE — not a real review. Will order again.",
+      "language": "en",
+      "image_url_fullxfull": null,
+      "create_timestamp": 1775347200,
+      "created_timestamp": 1775347200,
+      "update_timestamp": 1775347200,
+      "updated_timestamp": 1775347200
+    },
+    {
+      "shop_id": 7000000001,
+      "listing_id": 9000000001,
+      "rating": 5,
+      "review": "SYNTHETIC FIXTURE — not a real review. Great quality for the price.",
+      "language": "en",
+      "image_url_fullxfull": null,
+      "create_timestamp": 1779667200,
+      "created_timestamp": 1779667200,
+      "update_timestamp": 1779667200,
+      "updated_timestamp": 1779667200
+    }
+  ]
+}
