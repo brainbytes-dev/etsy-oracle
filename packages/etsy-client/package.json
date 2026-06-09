@@ -1,0 +1,30 @@
+{
+  "name": "@etsy-oracle/etsy-client",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Type-safe Etsy Open API v3 client with rate-limit + retry harness",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "generate": "openapi-typescript etsy-openapi.json -o src/generated/etsy.d.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test src/*.test.ts",
+    "clean": "rm -rf dist src/generated"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.12.4"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.4.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "@types/node": "^22.10.5"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@etsy-oracle/cli",
+  "version": "0.0.1",
+  "private": true,
+  "description": "etsy-oracle CLI — listings, status (ingest/estimate/niches land in later milestones)",
+  "type": "module",
+  "bin": {
+    "etsy-oracle": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "dev": "tsx src/cli.ts"
+  },
+  "dependencies": {
+    "@etsy-oracle/etsy-client": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2"
+  }
+}
