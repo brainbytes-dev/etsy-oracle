@@ -13,7 +13,9 @@
   },
   "scripts": {
     "generate": "openapi-typescript etsy-openapi.json -o src/generated/etsy.d.ts",
+    "prebuild": "test -f src/generated/etsy.d.ts || pnpm run generate",
     "build": "tsc",
+    "pretypecheck": "test -f src/generated/etsy.d.ts || pnpm run generate",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test src/*.test.ts",
     "clean": "rm -rf dist src/generated"
