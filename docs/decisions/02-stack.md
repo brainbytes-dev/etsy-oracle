@@ -47,15 +47,15 @@ The spec is vendored at `packages/etsy-client/etsy-openapi.json` and regenerated
 
 ## Auth
 
-- **API-key auth (keystring):** all v1 read endpoints (`findAllListingsActive`, `getListingsByShop`, reviews, etc.) use `x-api-key` header.
-- **OAuth2:** reserved for member-scoped writes — not needed for v1.
+- **API-key auth (`x-api-key`):** every v1 read endpoint (`findAllListingsActive`, `getListingsByShop`, reviews, even the unscoped `openapi-ping`) requires the header as **`<keystring>:<shared_secret>`** — keystring and shared secret joined by a colon. The bare keystring is rejected. Source: Etsy `essentials/authentication` and `tutorials/quickstart` (via the Etsy Dev MCP). Both `ETSY_API_KEYSTRING` and `ETSY_SHARED_SECRET` are required; the client throws if either is missing.
+- **OAuth2:** reserved for member-scoped writes — not needed for v1. (OAuth additionally sends a `Bearer` token, but the `x-api-key` colon header is still required even there.)
 - Secrets in `.env` (gitignored). Contract in `.env.example`.
 
-## M0 build notes (verified against the live API, 2026-06-09)
+## M0 build notes (2026-06-09)
 
-Two findings from wiring the client against the real Etsy API:
+Findings from wiring the client against the real Etsy API:
 
 - **`views` is not available.** The M0 done-when lists `views` as a column, but Etsy Open API v3 does **not** expose per-listing views on listing search (`findAllListingsActive`). `views` exists only on the `ShopListingWithAssociations` schema and is not returned by the search/active endpoints. The client prints the real fields — `listing_id`, `title`, `price`, `num_favorers`, `creation date` — and labels `views` as unavailable rather than fabricating it. `num_favorers` is the public-demand proxy the estimator uses downstream (consistent with the `etsy-v3-no-views-field` note). This does not block M0; it corrects one column the brief assumed.
-- **`x-api-key` takes the bare keystring** for app-level public endpoints (no `keystring:shared_secret` colon form, no OAuth). Verified end-to-end: a request with an invalid key returns `HTTP 403 {"error":"Invalid API key..."}`, proving the request path, header injection, rate-limiter, and error handling all work. A valid keystring is the only remaining input for the done-when.
+- **`x-api-key` requires `<keystring>:<shared_secret>` — CORRECTION (ETS-11).** An earlier note here claimed the bare keystring works. That was wrong. The official spec (`essentials/authentication`: *"Every request to a v3 endpoint must include an `x-api-key` header containing your keystring and shared secret separated by a colon"*; `tutorials/quickstart` sends `x-api-key: 1aa2...fff:a1b2c3d4e5` even for the unscoped `openapi-ping`) requires the colon form on every request. The prior "verified" claim rested on a `403` from an invalid key — but a `403` fires regardless of header format, so it proved the request path, not the format. `client.ts` now composes `<keystring>:<shared_secret>` and throws if the secret is absent; `client.test.ts` pins the header value.
 
 **Committed by:** CTO (2026-06-09)

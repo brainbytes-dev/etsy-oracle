@@ -2,12 +2,16 @@
  * Etsy Open API v3 client.
  *
  * Wraps openapi-fetch with:
- *   - x-api-key authentication (keystring)
+ *   - x-api-key authentication ("<keystring>:<shared_secret>", required on EVERY
+ *     v3 request per the official Etsy auth spec — not the bare keystring)
  *   - EtsyRateLimiter (10k req/day budget + burst limiting)
  *   - Exponential-backoff retry on 429/5xx
  *
  * Usage:
- *   const etsy = createEtsyClient({ apiKey: process.env.ETSY_API_KEYSTRING });
+ *   const etsy = createEtsyClient({
+ *     apiKey: process.env.ETSY_API_KEYSTRING,
+ *     sharedSecret: process.env.ETSY_SHARED_SECRET,
+ *   });
  *   const res = await etsy.GET("/v3/application/listings/active", { params: { query: { limit: 100 } } });
  */
 
@@ -17,12 +21,17 @@ import { EtsyRateLimiter, type RateLimiterOptions } from "./rate-limiter.js";
 import { withRetry, EtsyApiError, type RetryOptions } from "./retry.js";
 
 export interface EtsyClientOptions {
+  /** Etsy app keystring (API key). Defaults to ETSY_API_KEYSTRING. */
   apiKey?: string;
+  /** Etsy app shared secret. Defaults to ETSY_SHARED_SECRET. Required on every request. */
+  sharedSecret?: string;
   rateLimiter?: EtsyRateLimiter;
   rateLimiterOptions?: RateLimiterOptions;
   retry?: RetryOptions;
   /** Override base URL for testing. Default: https://openapi.etsy.com */
   baseUrl?: string;
+  /** Override the fetch implementation (testing/injection). */
+  fetch?: typeof fetch;
 }
 
 export type EtsyClient = ReturnType<typeof createEtsyClient>;
@@ -36,6 +45,19 @@ export function createEtsyClient(opts: EtsyClientOptions = {}): ReturnType<typeo
       "ETSY_API_KEYSTRING is required. Set it in .env or pass apiKey to createEtsyClient()."
     );
   }
+
+  const sharedSecret = opts.sharedSecret ?? process.env["ETSY_SHARED_SECRET"];
+  if (!sharedSecret) {
+    throw new Error(
+      "ETSY_SHARED_SECRET is required. The Etsy Open API v3 expects the x-api-key header " +
+        'as "<keystring>:<shared_secret>" on every request (see docs/decisions/02-stack.md). ' +
+        "Set ETSY_SHARED_SECRET in .env or pass sharedSecret to createEtsyClient()."
+    );
+  }
+
+  // Etsy v3 auth: x-api-key carries "<keystring>:<shared_secret>" on EVERY request,
+  // including unscoped endpoints like openapi-ping. The bare keystring is rejected.
+  const xApiKey = `${apiKey}:${sharedSecret}`;
 
   const rateLimiter = opts.rateLimiter ?? new EtsyRateLimiter(opts.rateLimiterOptions);
 
@@ -51,13 +73,14 @@ export function createEtsyClient(opts: EtsyClientOptions = {}): ReturnType<typeo
 
   const fetchClient = createFetchClient<paths>({
     baseUrl: opts.baseUrl ?? "https://openapi.etsy.com",
+    ...(opts.fetch ? { fetch: opts.fetch } : {}),
   });
 
   // Middleware: rate-limit acquire + x-api-key header injection.
   const authMiddleware: Middleware = {
     async onRequest({ request }) {
       await rateLimiter.acquire();
-      request.headers.set("x-api-key", apiKey);
+      request.headers.set("x-api-key", xApiKey);
       return request;
     },
 

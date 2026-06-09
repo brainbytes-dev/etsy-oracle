@@ -118,10 +118,14 @@ function cmdStatus(): void {
   const rl = new EtsyRateLimiter();
   const limit = rl.remaining + rl.used;
   const hasKey = Boolean(process.env["ETSY_API_KEYSTRING"]);
+  const hasSecret = Boolean(process.env["ETSY_SHARED_SECRET"]);
+  const authReady = hasKey && hasSecret;
   process.stdout.write(
     [
       `etsy-oracle status`,
       `  API keystring configured: ${hasKey ? "yes" : "NO — set ETSY_API_KEYSTRING in .env"}`,
+      `  Shared secret configured: ${hasSecret ? "yes" : "NO — set ETSY_SHARED_SECRET in .env"}`,
+      `  Auth ready (x-api-key):   ${authReady ? "yes" : 'NO — v3 needs "<keystring>:<shared_secret>", both required'}`,
       `  Daily request budget:     ${limit}`,
       `  Used today (UTC):         ${rl.used}`,
       `  Remaining today:          ${rl.remaining}`,
@@ -138,8 +142,9 @@ function usage(): void {
       "  etsy-oracle listings [--limit N] [--keywords \"...\"] [--json]",
       "  etsy-oracle status",
       "",
-      "Setup: copy .env.example to .env and set ETSY_API_KEYSTRING.",
-      "  Get a key at https://www.etsy.com/developers/your-apps",
+      "Setup: copy .env.example to .env and set ETSY_API_KEYSTRING and ETSY_SHARED_SECRET.",
+      "  Both are required — v3 sends them as x-api-key: <keystring>:<shared_secret>.",
+      "  Get them at https://www.etsy.com/developers/your-apps",
     ].join("\n") + "\n"
   );
 }
