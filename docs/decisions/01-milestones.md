@@ -107,7 +107,7 @@ M6 Web UI ── parked until v1 CLI runs
 
 ## Cross-cutting guardrails (binding on every milestone)
 
-- Local only. No git remote, no public push until Henrik says v1 stands.
+- Repo is public on GitHub (Henrik allowed early public). The quality gate governs what ships — never push broken, placeholder, unbranded, or fabricated commits. A public *launch* (HN/Reddit/Product Hunt) is Henrik's call only.
 - Official API only. No HTML scraping, ever.
 - Sales are estimates. Labelled as such everywhere. Never exact.
 - No fabricated data anywhere — code, output, README, UI.
