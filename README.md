@@ -7,7 +7,7 @@
 
 <p align="center">
   <img alt="status" src="https://img.shields.io/badge/status-early%20development-orange">
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="license" src="https://img.shields.io/badge/license-AGPL--3.0-blue">
   <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen">
 </p>
 
@@ -46,6 +46,6 @@ etsy-oracle computes the same thing from the official Etsy Open API, for free, o
 
 Issues and pull requests are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md). Security reports: see [SECURITY.md](./SECURITY.md).
 
-## License
+## License and model
 
-[MIT](./LICENSE). Use it, fork it, self-host it.
+[AGPL-3.0](./LICENSE). Open source, free to self-host forever. Open-core: self-hosting stays first-class and free, and a managed cloud version (paid, optional) is planned to fund the work. If you run a modified version as a public service, AGPL asks you to share your changes back.
