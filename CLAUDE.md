@@ -14,7 +14,7 @@ If you believe the architecture is wrong, raise it with Henrik as an approval, d
 
 ## Hard guardrails
 
-- **Local only.** No git remote, no public push until Henrik says v1 stands. A pre-push hook blocks pushing. This is a public-launch decision, his to make.
+- **Public repo, but the gate governs what ships.** The repo is public on GitHub (Henrik allowed early public). Never push broken, placeholder, unbranded, or fabricated commits; the quality gate and the definition of done govern every commit. Public code is fine; a public launch (Hacker News, Reddit, Product Hunt) is Henrik's call only, never announce without him.
 - **No fabricated data.** No mock "sales" presented as real, no made-up numbers in the README or UI. Honest estimates with a stated method.
 - **No premature launch actions.** No publishing, no Product Hunt, no Reddit posts. Draft the README and launch copy; do not post.
 
