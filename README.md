@@ -11,7 +11,7 @@
   <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen">
 </p>
 
-> Status: early development. The architecture is set and the build is underway. Star and watch to follow along; the launch is when v1 runs.
+> Status: early development. The architecture is set and the foundation — the Etsy API client and CLI — runs today. Star and watch to follow along; the launch is when v1 runs.
 
 ## Why this exists
 
@@ -34,13 +34,51 @@ etsy-oracle computes the same thing from the official Etsy Open API, for free, o
 
 ## Running it
 
-The CLI is being built and is not runnable yet. When it lands, the flow will be: clone the repo, install with [pnpm](https://pnpm.io/), add your free Etsy API key to a `.env` file, point the worker at a category, and query niches from the local DuckDB. The exact commands go here once they run end to end against the built CLI — this README will not list an install step it cannot back up. Follow the roadmap below or watch the repo for the v1 cut.
+What runs today is the foundation: the typed Etsy API client, the rate-limit and retry harness, and a small CLI (`status` and `listings`). The data pipeline — ingestion worker, sales estimator, niche scorer — is still on the roadmap below; those commands do not exist yet, and this README will not list a step it cannot back up.
 
-For the architecture and scope in the meantime, see [docs/PRODUCT-BRIEF.md](./docs/PRODUCT-BRIEF.md) and the [positioning doc](./docs/POSITIONING.md).
+Prerequisites: [Node.js](https://nodejs.org/) 20 or newer and [pnpm](https://pnpm.io/) 9 or newer.
+
+```bash
+# 1. Clone and install
+git clone https://github.com/brainbytes-dev/etsy-oracle.git
+cd etsy-oracle
+pnpm install
+
+# 2. Build
+pnpm build
+
+# 3. Check status — works with no key, no network
+node apps/cli/dist/cli.js status
+```
+
+`status` prints your daily request budget and how much is left:
+
+```
+etsy-oracle status
+  API keystring configured: NO — set ETSY_API_KEYSTRING in .env
+  Daily request budget:     10000
+  Used today (UTC):         1
+  Remaining today:          9999
+```
+
+To fetch real listings you need a free Etsy API key. Register an app at [etsy.com/developers/your-apps](https://www.etsy.com/developers/your-apps), then:
+
+```bash
+# 4. Add your key
+cp .env.example .env
+# edit .env and set ETSY_API_KEYSTRING=<your keystring>
+
+# 5. Fetch live listings
+node apps/cli/dist/cli.js listings --keywords "ceramic mug" --limit 5
+```
+
+Without a key, `listings` exits with a clear message (`ETSY_API_KEYSTRING is required`) rather than failing silently. Run `node apps/cli/dist/cli.js --help` for all flags (`--limit`, `--keywords`, `--json`).
+
+For the full architecture and scope, see [docs/PRODUCT-BRIEF.md](./docs/PRODUCT-BRIEF.md) and the [positioning doc](./docs/POSITIONING.md).
 
 ## Roadmap
 
-- [ ] Etsy API client generated from the official OpenAPI spec
+- [x] Etsy API client generated from the official OpenAPI spec, with rate-limit and retry harness
 - [ ] Ingestion worker, DuckDB schema
 - [ ] Sales / revenue estimator with own-shop calibration
 - [ ] Niche opportunity scorer
